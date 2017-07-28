@@ -35,6 +35,9 @@ export default {
   list: (app, model, parms) => {
     return instance.get(`/${app}/${model}/`, parms)
   },
+  detail: (app, model, pk, parms) => {
+    return instance.get(`/${app}/${model}/${pk}/update/`, parms)
+  },
   getCookie: (name) => {
     return getCookie(name)
   }

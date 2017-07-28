@@ -62,12 +62,14 @@
         <template slot="HEAD_action_checkbox" scope="field">
           <b-form-checkbox v-model="all" value="all" unchecked-value="all_not"></b-form-checkbox>
         </template>
-        <template slot="action_checkbox" scope="item">
-          <b-form-checkbox v-model="select" :value="item.item.pk"></b-form-checkbox>
-        </template>
-        <template :slot='he.label' v-for="he in list.result_headers" scope="item">
-          <router-link :to="item.item.pk+'/update/'" v-if='item.item.is_display_link'>{{item.item[he.filed_name]}}</router-link>
-          <template v-else>{{item.item[he.filed_name]}}</template>
+        <template :slot='he.filed_name' v-for="he in list.result_headers" scope="item">
+          <template v-if="he.filed_name == 'action_checkbox'">
+            <b-form-checkbox v-model="select" :value="item.item.cells[he.filed_name].value"></b-form-checkbox>
+          </template>
+          <template v-else>
+            <router-link :to="item.item.cells[he.filed_name].wraps[0]" v-if='item.item.cells[he.filed_name].is_display_link'>{{item.item.cells[he.filed_name].value}}</router-link>
+            <div v-else v-html="item.item.cells[he.filed_name].value"></div>
+          </template>
         </template>
       </b-table>
       <div v-else>
@@ -128,8 +130,8 @@ export default {
       let parms = {}
       this.$api.list(appName, modelName, parms).then(res => {
         var fields = {}
-        res['data']['result_headers'].map((header, i) => {
-          fields[header['filed_name']] = header
+        res.data.result_headers.cells.map((header, i) => {
+          fields[header.field_name] = { label: header.text, sortable: header.sortable, filed_name: header.field_name }
         })
         res['data']['result_headers'] = fields
         this.list = res['data']
@@ -140,8 +142,8 @@ export default {
     all(v) {
       if (v === 'all') {
         this.list.results.map(re => {
-          if (this.select.indexOf(re.pk) === -1) {
-            this.select.push(re.pk)
+          if (this.select.indexOf(re.cells.action_checkbox.value) === -1) {
+            this.select.push(re.cells.action_checkbox.value)
           }
         })
       } else {
