@@ -10,10 +10,18 @@
     </b-card>
   </div>
 </template>
-<script type="text/javascript">
+<script>
+import moment from 'moment'
 export default {
+  components: {
+  },
   data() {
     return {
+      state: {
+        date: new Date(2016, 9, 16)
+      },
+      startDatetime: moment(),
+      endDatetime: null,
       detail: { breadcrumbs: [] },
       formOptions: {
         validateAfterLoad: true,
@@ -39,13 +47,16 @@ export default {
 }
 
 </script>
-<style type="text/css">
+<style>
 .vue-form-generator .form-group label {
-    width: 150px;
-    float: left;
-    text-align: right;
+  width: 150px;
+  float: left;
+  text-align: right;
 }
+
 .vue-form-generator .field-wrap {
-    float: left;margin-left: 15px;
+  float: left;
+  margin-left: 15px;
 }
+@import '../assets/bootstrap-datetimepicker.min.css'
 </style>
