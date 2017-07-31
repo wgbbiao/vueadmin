@@ -58,5 +58,5 @@ export default {
   float: left;
   margin-left: 15px;
 }
-@import '../assets/bootstrap-datetimepicker.min.css'
+@import '../../static/bootstrap-datetimepicker.min.css'
 </style>
