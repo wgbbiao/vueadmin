@@ -5,16 +5,21 @@
       ddd
     </b-navbar>
     <b-card>
-      <vue-form-generator :schema="detail.schema" :model="detail.original">
-      </vue-form-generator>
+      <b-form ref='update_form'>
+        <vue-form-generator :schema="detail.schema" :model="update_model">
+        </vue-form-generator>
+        <b-button size="sm" variant="primary" href="" @click="save">
+          保存
+        </b-button>
+      </b-form>
     </b-card>
   </div>
 </template>
 <script>
 import moment from 'moment'
+
 export default {
-  components: {
-  },
+  components: {},
   data() {
     return {
       state: {
@@ -27,20 +32,29 @@ export default {
         validateAfterLoad: true,
         validateAfterChanged: true,
         fieldIdPrefix: 'user-'
-      }
+      },
+      update_model: {}
     }
+  },
+  created() {
+    this.appName = this.$route.params.app
+    this.modelName = this.$route.params.model
+    this.pk = this.$route.params.id
   },
   mounted() {
     this.getdetail()
   },
   methods: {
     getdetail() {
-      let appName = this.$route.params.app
-      let modelName = this.$route.params.model
-      let pk = this.$route.params.id
       let parms = {}
-      this.$api.detail(appName, modelName, pk, parms).then(res => {
+      this.$api.detail(this.appName, this.modelName, this.pk, parms).then(res => {
         this.detail = res['data']
+        this.update_model = res.data.original
+      })
+    },
+    save() {
+      this.$api.save(this.appName, this.modelName, this.pk, this.update_model).then(res => {
+        console.log(res)
       })
     }
   }
@@ -58,5 +72,7 @@ export default {
   float: left;
   margin-left: 15px;
 }
+
 @import '../../static/bootstrap-datetimepicker.min.css'
+
 </style>

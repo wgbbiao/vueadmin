@@ -1,5 +1,4 @@
 import axios from 'axios'
-import qs from 'qs'
 const instance = axios.create({
   // baseURL: 'http://192.168.50.127:8000/api/'
   baseURL: 'http://vueadmin/xadmin/'
@@ -21,6 +20,16 @@ function getCookie(name) {
   return cookieValue
 }
 
+function setFormdata(data) {
+  console.log(data)
+  let fd = new FormData()
+  for (var dd in data) {
+    console.log(dd)
+    fd.append(dd, data[dd])
+  }
+  return fd
+}
+
 export default {
   /**
    * 保存内容
@@ -30,7 +39,7 @@ export default {
   },
   login: (data) => {
     axios.defaults.headers.common['X-CSRFToken'] = getCookie('csrftoken')
-    return instance.post('', qs.stringify(data))
+    return instance.post('/', setFormdata(data))
   },
   list: (app, model, parms) => {
     return instance.get(`/${app}/${model}/`, parms)
@@ -40,5 +49,10 @@ export default {
   },
   getCookie: (name) => {
     return getCookie(name)
+  },
+  save: (app, model, pk, data) => {
+    data['_save'] = ''
+    axios.defaults.headers.common['X-CSRFToken'] = getCookie('csrftoken')
+    return instance.post(`/${app}/${model}/${pk}/update/`, setFormdata(data))
   }
 }

@@ -29,13 +29,15 @@ export default {
       username: ''
     }
   },
+  mounted() {
+    this.$api.index()
+  },
   methods: {
     Login() {
       var data = this.$data
       data['this_is_the_login_form'] = 1
       data['next'] = '/'
       data['csrfmiddlewaretoken'] = this.$api.getCookie('csrftoken')
-      // data['csrftoken'] = this.$api.getCookie('csrftoken')
       this.$api.login(data, res => {
         console.log(res)
       })
