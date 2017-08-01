@@ -19,6 +19,7 @@
     "babel-preset-es2017": "^6.24.1",
     "bootstrap-vue": "^0.18.0",
     "bootstrap4-datetimepicker": "https://github.com/wgbbiao/bootstrap4-datetimepicker.git",
+    "fecha": "^2.3.1",
     "font-awesome": "^4.7.0",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",

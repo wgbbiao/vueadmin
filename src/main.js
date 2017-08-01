@@ -15,7 +15,9 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import VueFormGenerator from 'vue-form-generator'
 import 'vue-form-generator/dist/vfg-core.css'
+import datetimeField from './form/datetime.vue'
 
+Vue.component('field-datetime', datetimeField)
 Vue.use(VueFormGenerator)
 
 Vue.config.productionTip = false
