@@ -4,12 +4,21 @@
     <b-navbar toggleable type="inverse" class="rounded" variant="success" style="margin-bottom:20px;">
       ddd
     </b-navbar>
+    <b-alert variant="success" :show="show">
+      {{detail.verbose_name}}"{{alter_message}}"修改成功。 你可以在下面再次编辑它。
+    </b-alert>
     <b-card>
       <b-form ref='update_form'>
         <vue-form-generator :schema="detail.schema" :model="update_model">
         </vue-form-generator>
-        <b-button size="sm" variant="primary" href="" @click="save">
+        <b-button variant="primary" @click="save('list')">
           保存
+        </b-button>
+        <b-button variant="secondary" @click="save('add')">
+          保存并增加另一个
+        </b-button>
+        <b-button variant="secondary" @click="save('self')">
+          保存并编辑
         </b-button>
       </b-form>
     </b-card>
@@ -22,6 +31,8 @@ export default {
   components: {},
   data() {
     return {
+      show: false,
+      alter_message: '',
       state: {
         date: new Date(2016, 9, 16)
       },
@@ -52,9 +63,19 @@ export default {
         this.update_model = res.data.original
       })
     },
-    save() {
+    save(act) {
       this.$api.save(this.appName, this.modelName, this.pk, this.update_model).then(res => {
-        console.log(res)
+        if (res.data.status === 'success') {
+          if (act === 'list') {
+            this.$router.push('../../')
+          } else if (act === 'add') {
+            this.$router.push('../../create')
+          } else if (act === 'self') {
+            // this.getdetail()
+            this.alter_message = res.data.obj
+            this.show = true
+          }
+        }
       })
     }
   }

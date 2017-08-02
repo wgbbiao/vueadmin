@@ -21,10 +21,8 @@ function getCookie(name) {
 }
 
 function setFormdata(data) {
-  console.log(data)
   let fd = new FormData()
   for (var dd in data) {
-    console.log(dd)
     fd.append(dd, data[dd])
   }
   return fd
@@ -51,7 +49,6 @@ export default {
     return getCookie(name)
   },
   save: (app, model, pk, data) => {
-    data['_save'] = ''
     axios.defaults.headers.common['X-CSRFToken'] = getCookie('csrftoken')
     return instance.post(`/${app}/${model}/${pk}/update/`, setFormdata(data))
   }

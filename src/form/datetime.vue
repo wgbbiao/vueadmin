@@ -42,10 +42,13 @@ export default {
   },
   methods: {
     today() {
+      console.log(this.value)
       this.date = fecha.format(new Date(), inputDateFormat)
+      this.value = this.getValue()
     },
     now() {
       this.time = fecha.format(new Date(), inputTimeFormat)
+      this.value = this.getValue()
     },
     getDateFormat() {
       if (this.schema.dateTimePickerOptions && this.schema.dateTimePickerOptions.format) {
@@ -55,10 +58,17 @@ export default {
       }
     },
 
+    getValue() {
+      return this.date + ' ' + this.time + ':00'
+    },
     ...dateFieldHelper
   },
 
   mounted() {
+    this.date = fecha.format(fecha.parse(this.value, inputFormat), inputDateFormat)
+    this.time = fecha.format(fecha.parse(this.value, inputFormat), inputTimeFormat)
+    this.model[this.schema.inputName + '_0'] = this.date
+    this.model[this.schema.inputName + '_1'] = this.time
     this.$nextTick(function() {
       if (window.$ && window.$.fn.datetimepicker) {
         let input = this.$el.querySelector('.date')
@@ -66,11 +76,13 @@ export default {
           format: inputDateFormat
         })).on('dp.change', () => {
           this.date = input.value
+          this.value = this.getValue()
         })
 
         let timeInput = this.$el.querySelector('.time')
         $(timeInput).datetimepicker({ format: inputTimeFormat }).on('dp.change', () => {
           this.time = timeInput.value
+          this.value = this.getValue()
         })
       } else {
         console.warn('Bootstrap datetimepicker library is missing. Please download from https://eonasdan.github.io/bootstrap-datetimepicker/ and load the script and CSS in the HTML head section!')
@@ -84,20 +96,14 @@ export default {
     }
   },
   watch: {
-    date: function(val) {
-      console.log('111111111111')
-      console.log(val)
+    date(val) {
+      this.model[this.schema.inputName + '_0'] = val
     },
-    time: function(val) {
-      console.log('33333333333')
-      console.log(val)
+    time(val) {
+      this.model[this.schema.inputName + '_1'] = val + ':00'
     }
   },
-  computed: {
-    value: function() {
-      return this.date + ' ' + this.time
-    }
-  }
+  computed: {}
 }
 
 </script>
